@@ -51,6 +51,11 @@ const pokeMapper: ColorMapper<Pokemon> = <T>(poke: T) => {
 export const pokemonArenaConfig: ArenaProps<Pokemon> = {
     xDim: DIMENSIONS.x,
     yDim: DIMENSIONS.y,
-    battle: new PokemonBattle(DIMENSIONS.x, DIMENSIONS.y, true),
+    battle: new PokemonBattle({
+        xDim: DIMENSIONS.x,
+        yDim: DIMENSIONS.y,
+        prioritizeWeakest: true,
+        skipRetaliation: true,
+    }),
     colorMapper: pokeMapper
 }

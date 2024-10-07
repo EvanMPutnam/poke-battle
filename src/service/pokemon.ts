@@ -3,6 +3,13 @@ import { ATTACKER_MAPPINGS, Pokemon, PokeType } from "../data/pokemon";
 const DEFAULT_HEALTH = 80;
 const DEFAULT_DAMAGE = 40;
 
+interface PokemonBattleProps {
+    xDim: number;
+    yDim: number;
+    prioritizeWeakest: boolean;
+    skipRetaliation: boolean;
+}
+
 const randomEnum = <T extends Object>(enumValues: T[keyof T][]): T[keyof T] => {
     const randomIndex = Math.floor(Math.random() * enumValues.length);
     return enumValues[randomIndex];
@@ -14,12 +21,15 @@ export class PokemonBattle implements Battle<Pokemon> {
     private yDim: number;
     private pokeTypes: PokeType[keyof PokeType][];
     private prioritizeWeakest: boolean;
+    private skipRelatization: boolean;
 
-    constructor(xDim: number, yDim: number, prioritizeWeakest: boolean) {
-        this.xDim = xDim;
-        this.yDim = yDim;
+
+    constructor(props: PokemonBattleProps) {
+        this.xDim = props.xDim;
+        this.yDim = props.yDim;
         this.pokeTypes = (Object.values(PokeType) as unknown) as PokeType[keyof PokeType][];
-        this.prioritizeWeakest = prioritizeWeakest;
+        this.prioritizeWeakest = props.prioritizeWeakest;
+        this.skipRelatization = props.skipRetaliation;
         this.reset();
     }
 
@@ -76,6 +86,11 @@ export class PokemonBattle implements Battle<Pokemon> {
             finisher.killedByType = starter.element;
             return;
         }
+
+        if (this.skipRelatization) {
+            return;
+        }
+
         starter.health -= finisher.defaultDamage * 
             ATTACKER_MAPPINGS[finisher.element][starter.element];
         if (starter.health <= 0) {
