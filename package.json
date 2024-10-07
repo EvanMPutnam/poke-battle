@@ -1,0 +1,28 @@
+{
+  "name": "pokemon-battle",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html",
+    "clean": "rimraf dist",
+    "clean-deep": "rimraf package-lock.json && rimraf dist && rimraf .parcel-cache && rimraf node_modules",
+    "server": "npx tsx ./src/server/app.ts",
+    "upload": "npx tsx ./src/util/rotateFiles.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/p5": "^1.7.0",
+    "p5": "^1.7.0",
+    "pino": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/pino": "^7.0.5",
+    "rimraf": "5.0.5",
+    "tsx": "^3.13.0",
+    "parcel": "^2.10.0"
+  }
+}
