@@ -34,8 +34,14 @@ export class PokemonBattle implements Battle<Pokemon> {
         };
     };
 
+    public getContender = (x: number, y: number) => this.pokemon[y][x];
+
     public round = () => {
-        // Battle!
+        this.battlePhase();
+        this.spawnPhase();
+    }
+
+    private battlePhase = () => {
         this.pokemon.forEach((pokeArr, y) => {
             pokeArr.forEach((poke, x) => {
                 if (poke.health <= 0) {
@@ -48,7 +54,9 @@ export class PokemonBattle implements Battle<Pokemon> {
                 this.battle(poke, contender);
             });
         });
-        // Reset dead.
+    }
+
+    private spawnPhase = () => {
         this.pokemon.forEach((pokeArr, y) => {
             pokeArr.forEach((poke, x) => {
                 if (poke.health > 0) {
@@ -96,8 +104,6 @@ export class PokemonBattle implements Battle<Pokemon> {
         }
         return;
     };
-
-    public getContender = (x: number, y: number) => this.pokemon[y][x];
 
     private randomPokemon = () => {
         const randEnum = randomEnum<PokeType>(this.pokeTypes) as PokeType;
