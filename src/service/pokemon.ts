@@ -13,11 +13,13 @@ export class PokemonBattle implements Battle<Pokemon> {
     private xDim: number;
     private yDim: number;
     private pokeTypes: PokeType[keyof PokeType][];
+    private prioritizeWeakest: boolean;
 
-    constructor(xDim: number, yDim: number) {
+    constructor(xDim: number, yDim: number, prioritizeWeakest: boolean) {
         this.xDim = xDim;
         this.yDim = yDim;
         this.pokeTypes = (Object.values(PokeType) as unknown) as PokeType[keyof PokeType][];
+        this.prioritizeWeakest = prioritizeWeakest;
         this.reset();
     }
 
@@ -39,7 +41,7 @@ export class PokemonBattle implements Battle<Pokemon> {
                 if (poke.health <= 0) {
                     return;
                 }
-                const contender = this.getRandomNeighbor(x, y);
+                const contender = this.getRandomNeighbor(poke, x, y);
                 if (!contender) {
                     return;
                 }
@@ -73,7 +75,7 @@ export class PokemonBattle implements Battle<Pokemon> {
         }
     } 
 
-    private getRandomNeighbor = (x: number, y: number) : Pokemon | undefined => {
+    private getRandomNeighbor = (poke: Pokemon, x: number, y: number) : Pokemon | undefined => {
         const contenders = [this.pokemon[y-1], this.pokemon[y+1]]
             .reduce<Pokemon[]>((accum, curr) => {
             if (curr && curr[x+1] && curr[x+1].health > 0) {
@@ -85,7 +87,12 @@ export class PokemonBattle implements Battle<Pokemon> {
             return accum;
         }, []);
         if (contenders.length > 0) {
-            return contenders[Math.floor(Math.random() * contenders.length)];
+            return !this.prioritizeWeakest ? 
+                contenders[Math.floor(Math.random() * contenders.length)] :
+                contenders.sort(
+                    (a, b) => ATTACKER_MAPPINGS[poke.element][b.element] 
+                                - ATTACKER_MAPPINGS[poke.element][a.element]
+                )[0];
         }
         return;
     };
