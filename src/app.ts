@@ -5,7 +5,6 @@ import { pokemonArenaConfig } from "./configuration/config";
 
 
 const sketch = (p: p5) => {
-
   const fps = 15;
   const arena = new Arena<Pokemon>(pokemonArenaConfig);
   const xDim = pokemonArenaConfig.xDim;
